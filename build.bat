@@ -5,14 +5,14 @@ goto:rem
 ---------------------------------------
 build.bat
 ---------------------------------------
-This batch script is made to help download all the required software for RetroBat,
+This batch script is made to help download all the required software for GameHive,
 to set the default configuration and to build the setup from sources.
 ---------------------------------------
 :rem
 
 :: ---- BUILDER OPTION ----
 
-set retrobat_version=5.1.0
+set GameHive_version=5.1.0
 set retroarch_version=1.10.3
 
 set get_batgui=0
@@ -25,7 +25,7 @@ set get_emulators=0
 set get_lrcores=0
 set get_mega_bezels=0
 set get_retroarch=1
-set get_retrobat_binaries=1
+set get_GameHive_binaries=1
 set get_system=1
 set get_wiimotegun=1
 
@@ -41,7 +41,7 @@ set archive_compression=3
 
 set deps_list=(git makensis 7za strip wget)
 set submodules_list=(bios default_theme decorations system)
-set packages_list=(retrobat_binaries batgui emulationstation batocera_ports mega_bezels retroarch roms wiimotegun)
+set packages_list=(GameHive_binaries batgui emulationstation batocera_ports mega_bezels retroarch roms wiimotegun)
 set legacy_cores_list=(4do emuscv imageviewer mame2014 mame2016 px68k)
 set emulators_black_list=(3dsen pico8 retroarch ryujinx steam teknoparrot yuzu yuzu-early-access)
 
@@ -115,7 +115,7 @@ if %user_choice% NEQ 0 (
 call :banner
 
 echo  This script can help you to download all the required 
-echo  softwares and build the RetroBat Setup with the NullSoft 
+echo  softwares and build the GameHive Setup with the NullSoft 
 echo  Scriptable Install System.
 echo +===========================================================+
 echo  (1) - full compilation
@@ -254,7 +254,7 @@ if exist "!tmp_infos_file!" (
 	goto :eof
 )
 
-(echo %date% %time% [INFO] Version: %name%-%retrobat_version%-%branch%)>> "!root_path!\%log_file%"
+(echo %date% %time% [INFO] Version: %name%-%GameHive_version%-%branch%)>> "!root_path!\%log_file%"
 (echo %date% %time% [INFO] Build Path: "!build_path!")>> "!root_path!\%log_file%"
 (echo %date% %time% [INFO] Download Path: "!download_path!")>> "!root_path!\%log_file%"
 
@@ -337,11 +337,11 @@ if %ERRORLEVEL% NEQ 0 (
 	goto :eof
 )
 
-if "%get_retrobat_binaries%"=="1" (
+if "%get_GameHive_binaries%"=="1" (
 	for %%i in (txt) do (xcopy "!root_path!\*.%%i" "!build_path!" /v /y)
 	if exist "!build_path!\butler_push.txt" del/Q "!build_path!\butler_push.txt"
 	
-	(echo %date% %time% [INFO] retrobat_binaries copied to "!build_path!")>> "!root_path!\%log_file%"
+	(echo %date% %time% [INFO] GameHive_binaries copied to "!build_path!")>> "!root_path!\%log_file%"
 )
 
 for %%i in %submodules_list% do (
@@ -371,7 +371,7 @@ for %%i in %packages_list% do (
 		(set download_url=!%%i_url!)
 		(set destination_path=!%%i_path!)
 
-		if "!package_name!"=="retrobat_binaries" (set package_file=%%i_%git_branch%.7z)
+		if "!package_name!"=="GameHive_binaries" (set package_file=%%i_%git_branch%.7z)
 		if "!package_name!"=="emulationstation" (set package_file=EmulationStation-Win32.zip)
 		if "!package_name!"=="batocera_ports" (set package_file=batocera-ports.zip)
 		if "!package_name!"=="retroarch" (set package_file=RetroArch.7z)
@@ -425,7 +425,7 @@ if "%get_emulators%"=="1" (
 
 goto :eof
 
-:: ---- SET RETROBAT CONFIG ----
+:: ---- SET GameHive CONFIG ----
 
 :set_config
 
@@ -434,16 +434,16 @@ set task=set_config
 
 echo :: SETTING CONFIG FILES...
 
-for /f "usebackq delims=" %%x in ("%system_path%\configgen\retrobat_tree.lst") do (if not exist "!build_path!\%%x\." md "!build_path!\%%x")
+for /f "usebackq delims=" %%x in ("%system_path%\configgen\GameHive_tree.lst") do (if not exist "!build_path!\%%x\." md "!build_path!\%%x")
 for /f "usebackq delims=" %%x in ("%system_path%\configgen\emulators_names.lst") do (if not exist "!build_path!\emulators\%%x\." md "!build_path!\emulators\%%x")
 for /f "usebackq delims=" %%x in ("%system_path%\configgen\systems_names.lst") do (if not exist "!build_path!\roms\%%x\." md "!build_path!\roms\%%x")
 for /f "usebackq delims=" %%x in ("%system_path%\configgen\systems_names.lst") do (if not exist "!build_path!\saves\%%x\." md "!build_path!\saves\%%x")
 
-if exist "!build_path!\retrobat.exe" (
+if exist "!build_path!\GameHive.exe" (
 
-	"!build_path!\retrobat.exe" /NOF #GetConfigFiles
-	"!build_path!\retrobat.exe" /NOF #SetEmulationStationSettings
-	"!build_path!\retrobat.exe" /NOF #SetEmulatorsSettings
+	"!build_path!\GameHive.exe" /NOF #GetConfigFiles
+	"!build_path!\GameHive.exe" /NOF #SetEmulationStationSettings
+	"!build_path!\GameHive.exe" /NOF #SetEmulatorsSettings
 	
 	if %ERRORLEVEL% NEQ 0 (
 		(set/A exit_code=%ERRORLEVEL%)
@@ -458,7 +458,7 @@ if exist "!build_path!\retrobat.exe" (
 	goto :eof	
 )
 
-if exist "!build_path!\retrobat.ini" del/Q "!build_path!\retrobat.ini"
+if exist "!build_path!\GameHive.ini" del/Q "!build_path!\GameHive.ini"
 
 if exist "!system_path!\resources\emulationstation\video\*.mp4" xcopy /v /y "!system_path!\resources\emulationstation\video\*.mp4" "!build_path!\emulationstation\.emulationstation\video"
 if exist "!system_path!\resources\emulationstation\music\*.ogg" xcopy /v /y "!system_path!\resources\emulationstation\music\*.ogg" "!build_path!\emulationstation\.emulationstation\music"
@@ -468,9 +468,9 @@ if not exist "!build_path!\system\version.info" (
 	(set timestamp=%date:~6,4%%date:~3,2%%date:~0,2%)
 	
 	if "%branch%" == "stable" (
-		(set release_version=%retrobat_version%-%branch%-%arch%)
+		(set release_version=%GameHive_version%-%branch%-%arch%)
 	) else (
-		(set release_version=%retrobat_version%-!timestamp!-%branch%-%arch%)
+		(set release_version=%GameHive_version%-!timestamp!-%branch%-%arch%)
 	)
 	
 	(echo|set/P=!release_version!)> "!build_path!\system\version.info"	
@@ -482,14 +482,14 @@ echo build version is: !release_version!
 
 goto :eof
 
-:: ---- BUILD RETROBAT SETUP ----
+:: ---- BUILD GameHive SETUP ----
 
 :build_setup
 
 set task=build_setup
 (echo %date% %time% [LABEL] :!task!)>> "!root_path!\%log_file%"
 
-echo :: BUILDING RETROBAT SETUP...
+echo :: BUILDING GameHive SETUP...
 
 call :check_version
 
@@ -560,8 +560,8 @@ echo :: PUSHING BUTLER...
 call :check_version
 
 if exist "!build_path!\system\version.info" (
-	butler push "!build_path!\%name%-v%release_version%-setup.exe" retrobatofficial/retrobat:%arch%-%branch% --userversion-file "!build_path!\system\version.info"
-	butler push --ignore "!build_path!\%name%-v%release_version%-setup.exe" --ignore "!build_path!\%name%-v%release_version%-setup.exe.sha256" --ignore "%name%-v%release_version%.%archive_format%" --ignore "%name%-v%release_version%.%archive_format%.sha256" --ignore "!build_path!\*.log" --ignore "!build_path!\hash_list.txt" --ignore "!build_path!\emulationstation\.emulationstation\es_settings.cfg" "!build_path!\" retrobatofficial/retrobat:%arch%-%branch% --userversion-file "!build_path!\system\version.info"
+	butler push "!build_path!\%name%-v%release_version%-setup.exe" GameHiveofficial/GameHive:%arch%-%branch% --userversion-file "!build_path!\system\version.info"
+	butler push --ignore "!build_path!\%name%-v%release_version%-setup.exe" --ignore "!build_path!\%name%-v%release_version%-setup.exe.sha256" --ignore "%name%-v%release_version%.%archive_format%" --ignore "%name%-v%release_version%.%archive_format%.sha256" --ignore "!build_path!\*.log" --ignore "!build_path!\hash_list.txt" --ignore "!build_path!\emulationstation\.emulationstation\es_settings.cfg" "!build_path!\" GameHiveofficial/GameHive:%arch%-%branch% --userversion-file "!build_path!\system\version.info"
 	(set/A exit_code=%ERRORLEVEL%)
 )
 
@@ -587,7 +587,7 @@ echo *************************************************************
 
 for %%j in %legacy_cores_list% do (
 
-	if "!package_name!"=="%%j" (set download_url=https://www.retrobat.ovh/repo/%arch%/legacy/lrcores)
+	if "!package_name!"=="%%j" (set download_url=https://www.GameHive.ovh/repo/%arch%/legacy/lrcores)
 )
 
 if exist "%download_path%\%package_file%" goto :eof

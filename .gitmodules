@@ -1,6 +1,6 @@
 [submodule "bios"]
 	path = bios
-	url = https://github.com/Rebirth09/RetroBat-BIOS.git
+	url = https://github.com/Rebirth09/GameHive-BIOS.git
 [submodule "system/decorations"]
 	path = system/decorations
 	url = https://github.com/Rebirth09/batocera-bezel.git
